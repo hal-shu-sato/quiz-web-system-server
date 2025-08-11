@@ -8,7 +8,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p .",
-    "dev": "npm-run-all2 -p watch start",
+    "dev": "npm-run-all2 -p watch:*",
     "fix": "npm-run-all2 fix:*",
     "fix:eslint": "eslint --fix",
     "fix:prettier": "prettier --write .",
@@ -16,8 +16,9 @@
     "lint:eslint": "eslint",
     "lint:prettier": "prettier --check .",
     "prepare": "husky",
-    "start": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts",
-    "watch": "tsc -w -p ."
+    "start": "node dist/index.js",
+    "watch:nodemon": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
+    "watch:tsc": "tsc -w -p ."
   },
   "lint-staged": {
     "*.ts": [
