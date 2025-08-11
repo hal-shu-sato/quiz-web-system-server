@@ -1,0 +1,47 @@
+{
+  "name": "typescript-app-template",
+  "version": "1.0.0",
+  "private": true,
+  "repository": "https://github.com/hal-shu-sato/typescript-app-template.git",
+  "license": "UNLICENSED",
+  "author": "ato lash <28973861+hal-shu-sato@users.noreply.github.com>",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "dev": "npm-run-all2 -p watch start",
+    "fix": "npm-run-all2 fix:*",
+    "fix:eslint": "eslint --fix",
+    "fix:prettier": "prettier --write .",
+    "lint": "npm-run-all2 lint:*",
+    "lint:eslint": "eslint",
+    "lint:prettier": "prettier --check .",
+    "prepare": "husky",
+    "start": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts",
+    "watch": "tsc -w -p ."
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9",
+    "@types/eslint-config-prettier": "^6",
+    "@types/node": "^24",
+    "eslint": "^9",
+    "eslint-config-prettier": "^10",
+    "globals": "^16",
+    "husky": "^9",
+    "lint-staged": "^16",
+    "nodemon": "^3",
+    "npm-run-all2": "^8",
+    "prettier": "^3",
+    "prettier-plugin-packagejson": "^2",
+    "ts-node": "^10",
+    "typescript": "^5",
+    "typescript-eslint": "^8"
+  },
+  "packageManager": "yarn@1.22.22"
+}
