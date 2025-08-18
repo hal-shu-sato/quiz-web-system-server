@@ -26,6 +26,7 @@ export type Question = {
 type AnswerBase = {
   id: string;
   participant_id: string;
+  participant_name: string;
   question_id: string;
   answer_text: string;
 };
