@@ -12,19 +12,19 @@ export type Participant = {
   id: string;
   name: string;
   score: number;
+  is_dobon: boolean;
   answer_order: number;
 };
 
 export type Question = {
   id: string;
   title: string;
-  points: number;
+  max_points: number;
   type: 'normal' | 'dobon';
 };
 
 type AnswerBase = {
   id: string;
-  session_id: string;
   participant_id: string;
   question_id: string;
   answer_text: string;
@@ -40,8 +40,8 @@ export type AnswerWithImage = AnswerBase & {
 
 export type Judge = {
   answer_id: string;
-  judge: 'pending' | 'correct' | 'partial' | 'incorrect' | 'dobon';
-  points: number;
+  judgment_result: 'pending' | 'correct' | 'partial' | 'incorrect' | 'dobon';
+  awarded_points: number;
 };
 
 export type AnswerWithJudge = Answer & Omit<Judge, 'answer_id'>;
