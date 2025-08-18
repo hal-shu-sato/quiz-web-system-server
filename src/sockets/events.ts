@@ -28,15 +28,19 @@ type AnswerBase = {
   participant_id: string;
   participant_name: string;
   question_id: string;
-  answer_text: string;
 };
 
-export type Answer = AnswerBase & {
+type TextAnswer = AnswerBase & {
+  answer_text: string;
+};
+type ImageAnswer = AnswerBase & {
   answer_image_url: string;
 };
 
+export type Answer = TextAnswer | ImageAnswer;
+
 export type AnswerWithImage = AnswerBase & {
-  answer_base64: string;
+  answer_base64?: string;
 };
 
 export type Judge = {
@@ -54,7 +58,9 @@ export interface ServerToClientEvents {
 }
 
 export interface ClientToServerEvents {
-  'answer:create': (answer: Omit<AnswerWithImage, 'id'>) => void;
+  'answer:create': (
+    answer: Omit<TextAnswer, 'id'> | Omit<AnswerWithImage, 'id'>,
+  ) => void;
 }
 
 export interface AdminServerToClientEvents {
