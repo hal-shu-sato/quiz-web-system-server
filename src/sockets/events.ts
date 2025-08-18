@@ -9,9 +9,9 @@ export type SessionState =
 export type ScreenState = 'linked' | 'answers' | 'judges' | 'scores';
 
 export interface ServerToClientEvents {
-  'state:update': (state: SessionState) => void;
+  'state:updated': (state: SessionState) => void;
 
-  'judge:update': (judge: {
+  'judge:updated': (judge: {
     question_id: string;
     judge: 'correct' | 'partial' | 'incorrect' | 'dobon';
     points: number;
@@ -29,11 +29,11 @@ export interface ClientToServerEvents {
 }
 
 export interface AdminServerToClientEvents {
-  'state:update': (state: SessionState) => void;
+  'state:updated': (state: SessionState) => void;
 
-  'screen:update': (screen: ScreenState) => void;
+  'screen:updated': (screen: ScreenState) => void;
 
-  'participants:list': (
+  'participants:updated': (
     participants: {
       id: string;
       name: string;
@@ -42,14 +42,14 @@ export interface AdminServerToClientEvents {
     }[],
   ) => void;
 
-  'question:read': (question: {
+  'question:updated': (question: {
     id: string;
-    question_title: string;
-    question_points: number;
-    question_type: string;
+    title: string;
+    points: number;
+    type: string;
   }) => void;
 
-  'answers:list': (
+  'answers:updated': (
     answers: {
       id: string;
       session_id: string;

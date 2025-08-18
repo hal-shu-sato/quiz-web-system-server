@@ -13,12 +13,12 @@ export function registerHandlers(
 ) {
   socket.on('state:update', (state) => {
     console.log('Admin changed state:', state);
-    io.emit('state:update', state);
-    namespace.emit('state:update', state);
+    io.emit('state:updated', state);
+    namespace.emit('state:updated', state);
   });
 
   socket.on('screen:update', (screen) => {
     console.log('Admin updated screen:', screen);
-    namespace.emit('screen:update', screen);
+    namespace.emit('screen:updated', screen);
   });
 }
