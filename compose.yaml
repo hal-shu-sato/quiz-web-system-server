@@ -8,5 +8,7 @@ services:
       - '4000:4000'
     stdin_open: true
     tty: true # Keeps the container running for debugging
+    env_file:
+      - .env
     volumes:
       - ./files:/usr/src/app/files
