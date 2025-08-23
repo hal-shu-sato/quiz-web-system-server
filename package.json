@@ -8,6 +8,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p .",
+    "db:deploy": "prisma migrate deploy && prisma generate",
     "dev": "npm-run-all2 -p watch:*",
     "fix": "npm-run-all2 fix:*",
     "fix:eslint": "eslint --fix",
