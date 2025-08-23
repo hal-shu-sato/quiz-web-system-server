@@ -8,4 +8,4 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
-CMD ["sh", "-c", "yarn run build && yarn run start"]
+CMD ["sh", "-c", "yarn run db:deploy && yarn run build && yarn run start"]
