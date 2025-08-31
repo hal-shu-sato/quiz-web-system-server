@@ -25,6 +25,8 @@ export function initializeSocket(httpServer: HttpServer) {
 
     registerMainHandlers(io, socket);
 
+    socket.emit('state:updated', 'wait');
+
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);
     });
