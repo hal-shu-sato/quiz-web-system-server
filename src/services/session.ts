@@ -1,42 +1,45 @@
 import type { Session } from '../generated/prisma';
 import prisma from '../lib/prisma';
 
-export function createSession(
-  title: string,
-  code: string,
-  startAt?: Date,
-  endAt?: Date,
-) {
-  return prisma.session.create({
-    data: {
-      title,
-      code,
-      startAt,
-      endAt,
-    },
-  });
-}
+export type SessionCreationParams = Pick<
+  Session,
+  'title' | 'code' | 'startAt' | 'endAt'
+>;
 
-export function getSessionById(id: string) {
-  return prisma.session.findUnique({
-    where: { id },
-  });
-}
+export class SessionService {
+  create(data: SessionCreationParams) {
+    return prisma.session.create({
+      data: {
+        title: data.title,
+        code: data.code,
+        startAt: data.startAt,
+        endAt: data.endAt,
+      },
+    });
+  }
 
-export function getSessionByCode(code: string) {
-  return prisma.session.findUnique({
-    where: { code },
-  });
-}
-export function updateSession(id: string, data: Partial<Session>) {
-  return prisma.session.update({
-    where: { id },
-    data,
-  });
-}
+  getById(id: string) {
+    return prisma.session.findUnique({
+      where: { id },
+    });
+  }
 
-export function deleteSession(id: string) {
-  return prisma.session.delete({
-    where: { id },
-  });
+  getByCode(code: string) {
+    return prisma.session.findUnique({
+      where: { code },
+    });
+  }
+
+  update(id: string, data: Partial<Session>) {
+    return prisma.session.update({
+      where: { id },
+      data,
+    });
+  }
+
+  delete(id: string) {
+    return prisma.session.delete({
+      where: { id },
+    });
+  }
 }

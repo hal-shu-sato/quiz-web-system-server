@@ -1,10 +1,7 @@
 import { Router, type Request } from 'express';
-import { getAnswersByParticipantId } from '../../../services/answer';
-import {
-  createParticipant,
-  getParticipantByReconnectionCode,
-} from '../../../services/participant';
-import { getSessionByCode, getSessionById } from '../../../services/session';
+import { AnswerService } from '../../../services/answer';
+import { ParticipantService } from '../../../services/participant';
+import { SessionService } from '../../../services/session';
 
 const router = Router();
 
@@ -25,17 +22,15 @@ router.post(
         .json({ error: 'code, name and reconnectionCode required' });
     }
 
-    const session = await getSessionByCode(code);
+    const session = await new SessionService().getByCode(code);
     if (!session) {
       return res.status(404).json({ error: 'Session not found' });
     }
 
     const { id: sessionId } = session;
-    const participant = await createParticipant({
+    const participant = await new ParticipantService().create({
       sessionId,
       name,
-      score: 0,
-      isDobon: false,
       reconnectionCode,
     });
 
@@ -56,13 +51,13 @@ router.post(
         .json({ error: 'code and reconnectionCode required' });
     }
 
-    const session = await getSessionByCode(code);
+    const session = await new SessionService().getByCode(code);
     if (!session) {
       return res.status(404).json({ error: 'Session not found' });
     }
 
     const { id: sessionId } = session;
-    const participant = await getParticipantByReconnectionCode(
+    const participant = await new ParticipantService().getByReconnectionCode(
       sessionId,
       reconnectionCode,
     );
@@ -80,7 +75,7 @@ router.get('/sessions/:sessionId', async (req, res) => {
     return res.status(400).json({ error: 'sessionId required' });
   }
 
-  const session = await getSessionById(sessionId);
+  const session = await new SessionService().getById(sessionId);
   if (!session) {
     return res.status(404).json({ error: 'Session not found' });
   }
@@ -99,7 +94,9 @@ router.get(
       return res.status(400).json({ error: 'participantId required' });
     }
 
-    const answers = await getAnswersByParticipantId(participantId);
+    const answers = await new AnswerService().listByParticipantId(
+      participantId,
+    );
 
     res.json(answers);
   },

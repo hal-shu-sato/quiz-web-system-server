@@ -1,29 +1,9 @@
 import { Request, Router } from 'express';
 import type { AnswerType, JudgmentResult } from '../../../generated/prisma';
-import {
-  createAnswer,
-  deleteAnswer,
-  getAnswerById,
-  updateAnswer,
-} from '../../../services/answer';
-import {
-  createParticipant,
-  deleteParticipant,
-  getParticipantById,
-  updateParticipant,
-} from '../../../services/participant';
-import {
-  createQuestion,
-  deleteQuestion,
-  getQuestionById,
-  updateQuestion,
-} from '../../../services/question';
-import {
-  createSession,
-  deleteSession,
-  getSessionById,
-  updateSession,
-} from '../../../services/session';
+import { AnswerService } from '../../../services/answer';
+import { ParticipantService } from '../../../services/participant';
+import { QuestionService } from '../../../services/question';
+import { SessionService } from '../../../services/session';
 
 const router = Router();
 
@@ -44,17 +24,17 @@ router.post(
     res,
   ) => {
     const { title, code, startAt, endAt } = req.body;
-    const session = await createSession(
+    const session = await new SessionService().create({
       title,
       code,
-      startAt ? new Date(startAt) : undefined,
-      endAt ? new Date(endAt) : undefined,
-    );
+      startAt: startAt ? new Date(startAt) : null,
+      endAt: endAt ? new Date(endAt) : null,
+    });
     res.json(session);
   },
 );
 router.get('/sessions/:id', async (req, res) => {
-  const session = await getSessionById(req.params.id);
+  const session = await new SessionService().getById(req.params.id);
   res.json(session);
 });
 router.put(
@@ -73,7 +53,7 @@ router.put(
     res,
   ) => {
     const { title, code, startAt, endAt } = req.body;
-    const session = await updateSession(req.params.id, {
+    const session = await new SessionService().update(req.params.id, {
       title,
       code,
       startAt: startAt ? new Date(startAt) : undefined,
@@ -83,7 +63,7 @@ router.put(
   },
 );
 router.delete('/sessions/:id', async (req, res) => {
-  const session = await deleteSession(req.params.id);
+  const session = await new SessionService().delete(req.params.id);
   res.json(session);
 });
 
@@ -99,18 +79,16 @@ router.post(
     res,
   ) => {
     const { sessionId, name, reconnectionCode } = req.body;
-    const participant = await createParticipant({
+    const participant = await new ParticipantService().create({
       name,
       sessionId,
-      score: 0,
-      isDobon: false,
       reconnectionCode,
     });
     res.json(participant);
   },
 );
 router.get('/participants/:id', async (req, res) => {
-  const participant = await getParticipantById(req.params.id);
+  const participant = await new ParticipantService().getById(req.params.id);
   res.json(participant);
 });
 router.put(
@@ -128,12 +106,15 @@ router.put(
     >,
     res,
   ) => {
-    const participant = await updateParticipant(req.params.id, req.body);
+    const participant = await new ParticipantService().update(
+      req.params.id,
+      req.body,
+    );
     res.json(participant);
   },
 );
 router.delete('/participants/:id', async (req, res) => {
-  const participant = await deleteParticipant(req.params.id);
+  const participant = await new ParticipantService().delete(req.params.id);
   res.json(participant);
 });
 
@@ -149,12 +130,16 @@ router.post(
     res,
   ) => {
     const { sessionId, title, maxPoints } = req.body;
-    const question = await createQuestion(sessionId, title, maxPoints);
+    const question = await new QuestionService().create(
+      sessionId,
+      title,
+      maxPoints,
+    );
     res.json(question);
   },
 );
 router.get('/questions/:id', async (req, res) => {
-  const question = await getQuestionById(req.params.id);
+  const question = await new QuestionService().getById(req.params.id);
   res.json(question);
 });
 router.put(
@@ -170,12 +155,15 @@ router.put(
     >,
     res,
   ) => {
-    const question = await updateQuestion(req.params.id, req.body);
+    const question = await new QuestionService().update(
+      req.params.id,
+      req.body,
+    );
     res.json(question);
   },
 );
 router.delete('/questions/:id', async (req, res) => {
-  const question = await deleteQuestion(req.params.id);
+  const question = await new QuestionService().delete(req.params.id);
   res.json(question);
 });
 
@@ -198,12 +186,12 @@ router.post(
     >,
     res,
   ) => {
-    const answer = await createAnswer(req.body);
+    const answer = await new AnswerService().create(req.body);
     res.json(answer);
   },
 );
 router.get('/answers/:id', async (req, res) => {
-  const answer = await getAnswerById(req.params.id);
+  const answer = await new AnswerService().getById(req.params.id);
   res.json(answer);
 });
 router.put(
@@ -222,12 +210,12 @@ router.put(
     >,
     res,
   ) => {
-    const answer = await updateAnswer(req.params.id, req.body);
+    const answer = await new AnswerService().update(req.params.id, req.body);
     res.json(answer);
   },
 );
 router.delete('/answers/:id', async (req, res) => {
-  const answer = await deleteAnswer(req.params.id);
+  const answer = await new AnswerService().delete(req.params.id);
   res.json(answer);
 });
 

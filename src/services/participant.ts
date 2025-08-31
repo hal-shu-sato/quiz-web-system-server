@@ -1,51 +1,61 @@
 import type { Participant } from '../generated/prisma';
 import prisma from '../lib/prisma';
 
-export function createParticipant(data: Omit<Participant, 'id'>) {
-  return prisma.participant.create({
-    data,
-  });
-}
+export type ParticipantCreationParams = Pick<
+  Participant,
+  'name' | 'sessionId' | 'reconnectionCode'
+>;
 
-export function getParticipantById(id: string) {
-  return prisma.participant.findUnique({
-    where: { id },
-  });
-}
-
-export function getParticipantsBySessionId(sessionId: string) {
-  return prisma.participant.findMany({
-    where: { sessionId },
-  });
-}
-
-export function getParticipantByReconnectionCode(
-  sessionId: string,
-  reconnectionCode: string,
-) {
-  return prisma.participant.findUnique({
-    where: {
-      sessionId_reconnectionCode: {
-        sessionId,
-        reconnectionCode,
+export class ParticipantService {
+  create(data: ParticipantCreationParams) {
+    return prisma.participant.create({
+      data: {
+        name: data.name,
+        sessionId: data.sessionId,
+        score: 0,
+        isDobon: false,
+        reconnectionCode: data.reconnectionCode,
       },
-    },
-  });
-}
+    });
+  }
 
-export function updateParticipant(id: string, data: Partial<Participant>) {
-  return prisma.participant.update({
-    where: { id },
-    data,
-  });
-}
+  getById(id: string) {
+    return prisma.participant.findUnique({
+      where: { id },
+    });
+  }
 
-export function deleteParticipant(id: string) {
-  return prisma.participant.delete({
-    where: { id },
-  });
-}
+  listBySessionId(sessionId: string) {
+    return prisma.participant.findMany({
+      where: { sessionId },
+    });
+  }
 
-export function listParticipants() {
-  return prisma.participant.findMany();
+  getByReconnectionCode(sessionId: string, reconnectionCode: string) {
+    return prisma.participant.findUnique({
+      where: {
+        sessionId_reconnectionCode: {
+          sessionId,
+          reconnectionCode,
+        },
+      },
+    });
+  }
+
+  update(id: string, data: Partial<Participant>) {
+    return prisma.participant.update({
+      where: { id },
+      data,
+    });
+  }
+
+  delete(id: string) {
+    return prisma.participant.delete({
+      where: { id },
+    });
+  }
+
+  list() {
+    return prisma.participant.findMany();
+  }
 }
